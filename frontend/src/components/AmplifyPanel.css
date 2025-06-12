@@ -1,0 +1,12 @@
+.dnf-green-text {
+  color: #7cf9e4; /* 민트색 고정 */
+  font-weight: bold;
+  font-family: 'Malgun Gothic', '맑은 고딕', sans-serif;
+
+  /* 얇은 테두리만 */
+  text-shadow:
+    -1px  0 0 #000,
+     1px  0 0 #000,
+     0   -1px 0 #000,
+     0    1px 0 #000;
+}

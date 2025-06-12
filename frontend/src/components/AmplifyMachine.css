@@ -1,0 +1,109 @@
+.machine-wrapper {
+  text-align: center;
+  padding: 20px;
+  background-color: #111;
+  border-radius: 12px;
+  max-width: 800px;
+  margin: 0 auto;
+  color: white;
+}
+
+.amplify-title {
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #73f5af;
+}
+
+.frame-container {
+  position: relative;
+  display: inline-block;
+}
+
+.frame-img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.item-icon-centered {
+  position: absolute;
+  top: 41%;
+  left: 50%;
+  transform: translate(-56.5%, -50%);
+  width: 55px;
+  height: 55px;
+}
+
+.amplify-panels {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.panel {
+  background-color: #222;
+  padding: 16px;
+  border-radius: 10px;
+  width: 320px;
+  text-align: left;
+  color: #ddd;
+}
+
+.panel h4 {
+  color: white;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.event {
+  color: #48f0a8;
+  font-weight: bold;
+}
+
+.material-icon {
+  width: 55px;
+  height: 55px;
+  margin-bottom: 6px;
+}
+
+.material-text {
+  margin-bottom: 6px;
+}
+
+.gold {
+  color: gold;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.success {
+  color: #00ff88;
+  margin-bottom: 4px;
+}
+
+.fail {
+  color: #ff6666;
+  margin-bottom: 0;
+}
+
+.bonus {
+  color: #66ffcc;
+  font-size: 0.9em;
+}
+
+/* 모순의 결정체 스타일 */
+.conflict-text {
+  font-family: 'Pretendard', sans-serif;
+  color: #a070f8;
+  font-weight: bold;
+  text-shadow: 0 0 2px #5020a0;
+}
+
+/* 조화의 결정체 스타일 */
+.harmony-text {
+  font-family: 'Pretendard', sans-serif;
+  color: #ff00cc;
+  font-weight: bold;
+  text-shadow: 0 0 2px #a00088;
+}
