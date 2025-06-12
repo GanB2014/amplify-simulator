@@ -11,10 +11,13 @@ function AmplifyMachine() {
   const [harmonyPrice, setHarmonyPrice] = useState('');
   const [conflictPrice, setConflictPrice] = useState('');
   const [protectionPrice, setProtectionPrice] = useState('');
-  const [result, setResult] = useState('');
+  const [, setResult] = useState('');
   const [cost, setCost] = useState(0);
   const [destroyed, setDestroyed] = useState(false);
   const [correctionCount, setCorrectionCount] = useState(0);
+  const [effectType, setEffectType] = useState(null); // 'success' | 'fail' | 'destroy'
+
+
 
   const handleAmplify = async (type) => {
     try {
@@ -36,9 +39,31 @@ function AmplifyMachine() {
       setResult(data.message);
       setCost((prev) => prev + data.cost);
       setDestroyed(data.destroyed);
+
+      if (data.destroyed) {
+        setLevel(0);
+        setEffectType('destroy'); // 파괴
+      } else if (data.success) {
+        setEffectType('success'); // 성공
+      } else {
+        setEffectType('fail');    // 실패
+      }
+
       if (data.destroyed) {
         setLevel(0);
       }
+          // ✅ 기존 애니메이션 리셋 후 재생: 짧은 시간 차 두고 재설정
+        setEffectType(null); // 먼저 효과 초기화
+        setTimeout(() => {
+          if (data.destroyed) {
+            setEffectType('destroy'); // 파괴
+          } else if (data.success) {
+            setEffectType('success'); // 성공
+          } else {
+          setEffectType('fail');    // 실패
+          }
+        }, 10); // 10ms 뒤에 설정하면 애니메이션이 재생됨
+
       if (type === 'safe' && !data.success) {
         setCorrectionCount((prev) => prev + 1);
       } else if (type === 'safe' && data.success) {
@@ -56,6 +81,8 @@ function AmplifyMachine() {
     setResult('');
     setDestroyed(false);
     setCorrectionCount(0);
+    setEffectType(null); // 애니메이션 초기화
+
   };
 
   const harmonyTable = {
@@ -144,7 +171,10 @@ function AmplifyMachine() {
           <input
             type="number"
             value={level}
-            onChange={(e) => setLevel(Number(e.target.value))}
+            onChange={(e) => {
+              setLevel(Number(e.target.value));
+              setEffectType(null);
+            }} 
             disabled={destroyed}
             style={{ width: '60px' }}
           />
@@ -153,12 +183,14 @@ function AmplifyMachine() {
         <div className="amplify-title" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)', fontSize: '20px', color: '#73f5af' }}>
           +{level} {itemType}
         </div>
-
         <div className="right-controls" style={{ textAlign: 'right' }}>
           <label>장비 종류:</label>
           <select
             value={itemType}
-            onChange={(e) => setItemType(e.target.value)}
+            onChange={(e) => {
+              setItemType(e.target.value);
+              setEffectType(null);
+            }}
             className="type-select"
           >
             <option value="무기">무기</option>
@@ -169,7 +201,11 @@ function AmplifyMachine() {
               <input
                 type="checkbox"
                 checked={useProtection}
-                onChange={() => setUseProtection(!useProtection)}
+                onChange={() => {
+                  setUseProtection(!useProtection);
+                  setEffectType(null);
+                  setResult('');
+                }}
               />
               증폭 보호권 사용
             </label>
@@ -177,13 +213,24 @@ function AmplifyMachine() {
         </div>
       </div>
 
-      <div className="frame-container">
+      <div className="frame-container" style={{ position: 'relative' }}>
+        {effectType && (
+          <img
+            key={Date.now()}  //
+            src={`/assets/${effectType}-text.png`}
+            alt="효과 텍스트"
+            className={`effect-text effect-${effectType}`}
+          />
+        )}
         <img src="/assets/frame.png" alt="프레임" className="frame-img" />
-        <img
-          src={itemType === '무기' ? '/assets/weapon-icon.png' : '/assets/armor-icon.png'}
-          alt="장비 아이콘"
-          className="item-icon-centered"
-        />
+        {/* 장비 이미지: destroyed 상태일 경우 표시하지 않음 */}
+        {!destroyed && (
+         <img
+           src={itemType === '무기' ? '/assets/weapon-icon.png' : '/assets/armor-icon.png'}
+           alt="장비 아이콘"
+           className="item-icon-centered"
+          />
+       )}
       </div>
 
       <div className="amplify-panels">
@@ -192,7 +239,11 @@ function AmplifyMachine() {
             <input
               type="checkbox"
               checked={useConflict}
-              onChange={() => setUseConflict(!useConflict)}
+              onChange={() => {
+                setUseConflict(!useConflict);
+                setEffectType(null);
+                setResult('');
+              }}
             />
             모순의 결정체 구매
           </label>
@@ -212,31 +263,38 @@ function AmplifyMachine() {
           <button onClick={() => handleAmplify('normal')} disabled={destroyed}>⚒ 증폭</button>
         </div>
 
-        <div className="panel safe">
-          <label>
-            <input
-              type="checkbox"
-              checked={useHarmony}
-              onChange={() => setUseHarmony(!useHarmony)}
-            />
-            조화의 결정체 구매
-          </label>
+          <div className="panel safe">
+            <label>
+              <input
+                type="checkbox"
+                checked={useHarmony}
+                onChange={() => {
+                  setUseHarmony(!useHarmony);
+                  setEffectType(null);
+                  setResult('');
+                }}
+              />
+              조화의 결정체 구매
+            </label>
 
-          <h4>안전증폭</h4>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <img src="/assets/harmony.png" alt="조화" className="material-icon" />
-            <span className="material-text harmony-text">{`${getSafeAmplifyInfo().quantity} 조화의 결정체`}</span>
+            <h4>안전증폭</h4>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <img src="/assets/harmony.png" alt="조화" className="material-icon" />
+              <span className="material-text harmony-text">{`${getSafeAmplifyInfo().quantity} 조화의 결정체`}</span>
+            </div>
+            <p className="gold">{getSafeAmplifyInfo().gold.toLocaleString()} 골드</p>
+            <p className="success">✔ 성공 확률 {getCorrectedSuccessRate()}</p>
+            <p className="fail">
+              {getSafeAmplifyInfo().success < 100
+                ? `✘ 실패 시 유지${getSafeAmplifyInfo().correction !== '-' ? `, 보정치 ${getSafeAmplifyInfo().correction}%p` : ''}`
+                : '\u00A0'}
+            </p>
+          {level < 10 && (
+            <button onClick={() => handleAmplify('safe')} disabled={destroyed}>⚒ 안전증폭</button>
+          )}
           </div>
-          <p className="gold">{getSafeAmplifyInfo().gold.toLocaleString()} 골드</p>
-          <p className="success">✔ 성공 확률 {getCorrectedSuccessRate()}</p>
-          <p className="fail">
-            {getSafeAmplifyInfo().success < 100
-              ? `✘ 실패 시 유지${getSafeAmplifyInfo().correction !== '-' ? `, 보정치 ${getSafeAmplifyInfo().correction}%p` : ''}`
-              : '\u00A0'}
-          </p>
-          <button onClick={() => handleAmplify('safe')} disabled={destroyed}>⚒ 안전증폭</button>
-        </div>
       </div>
+
 
       <div className="options" style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap', marginTop: '16px' }}>
         <div className="row">
@@ -244,7 +302,10 @@ function AmplifyMachine() {
           <input
             type="number"
             value={harmonyPrice}
-            onChange={(e) => setHarmonyPrice(e.target.value)}
+            onChange={(e) => {
+              setHarmonyPrice(e.target.value);
+              setEffectType(null);
+            }}
             placeholder="예: 2700"
             style={{ width: '100px' }}
           />
@@ -254,7 +315,10 @@ function AmplifyMachine() {
           <input
             type="number"
             value={conflictPrice}
-            onChange={(e) => setConflictPrice(e.target.value)}
+            onChange={(e) => {
+              setConflictPrice(e.target.value);
+              setEffectType(null);
+            }}
             placeholder="예: 55000"
             style={{ width: '100px' }}
           />
@@ -264,7 +328,10 @@ function AmplifyMachine() {
           <input
             type="number"
             value={protectionPrice}
-            onChange={(e) => setProtectionPrice(e.target.value)}
+            onChange={(e) => {
+              setProtectionPrice(e.target.value);
+              setEffectType(null);
+            }}
             placeholder="예: 11100000"
             style={{ width: '120px' }}
           />
@@ -272,7 +339,6 @@ function AmplifyMachine() {
       </div>
 
       <div className="result-section">
-        <p className="result">{result}</p>
         <p className="gold">누적 골드 소모: {cost.toLocaleString()} G</p>
         <button onClick={handleReset}>🔄 초기화</button>
       </div>
