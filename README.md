@@ -61,19 +61,21 @@
 
 ---
 
-## 🛠 기술 스택
+## ⚙️ 기술 스택
 
-### Backend
-- Python 3.10+
-- FastAPI
-- Uvicorn
-- Pydantic
+### Backend  
+- FastAPI  
+- SQLAlchemy  
+- MySQL  
+- Uvicorn  
+- Pydantic  
 
-### Frontend
-- React (Vanilla 기반)
-- CSS (Custom)
-- Axios
-
+### Frontend  
+- React  
+- React Router  
+- Bootstrap 5  
+- Axios  
+- Context API
 ---
 
 ## ⚙️ 실행 방법
