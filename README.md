@@ -31,6 +31,16 @@
 └── 📜 .gitignore              # Git 버전 관리 제외 항목
 ```
 
+### 구성
+
+|초기화면 #1|장비 선택 #2|증폭 성공 #3|
+|:---:|:---:|:---:|
+|![1 초기화면](https://github.com/user-attachments/assets/e5d625e4-163c-4e5d-b1b1-9094ec542851)|![2 장비 선택](https://github.com/user-attachments/assets/2740f39e-d995-4d99-8cbd-562d998510b5)|![3 증폭 성공](https://github.com/user-attachments/assets/2e6afc4f-d1f8-4b88-b377-a2b60d11b85b)|
+
+|증폭 실패 #4|장비 파괴 #5|
+|:---:|:---:|
+|![4 증폭실패](https://github.com/user-attachments/assets/209aeb55-5a3a-4458-a029-915693a6d561)|![5 장비파괴](https://github.com/user-attachments/assets/3833646b-4ac7-4bfe-9330-16320b4ccffc)|
+
 ---
 
 ## ✅ 주요 기능
